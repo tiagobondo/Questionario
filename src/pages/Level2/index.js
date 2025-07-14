@@ -16,6 +16,15 @@ import { defaultStyles } from '../../../defaultStyles/defaultSyles';
 const imagens = {
   img1: require('../../../assets/img/img1.jpg'),
   img2: require('../../../assets/img/img2.jpg'),
+  img3: require('../../../assets/img/img3.jpg'),
+  img4: require('../../../assets/img/img4.jpg'),
+  img5: require('../../../assets/img/img5.jpg'),
+  img6: require('../../../assets/img/img6.jpg'),
+  img7: require('../../../assets/img/img7.jpg'),
+  img8: require('../../../assets/img/img8.jpg'),
+  img9: require('../../../assets/img/img9.jpg'),
+  img10: require('../../../assets/img/img10.jpg'),
+  img11: require('../../../assets/img/img11.jpg'),
 }
 
 
@@ -24,10 +33,75 @@ const Level2 = () => {
   const [questoes, setQuestoes] = useState([
     {
       id: 1,
-      questao: 'Qual?',
+      questao: 'Em que figura aparece o Guido van Rossum?',
       opcoes: ['img1', 'img2'],
       respostaCerta: 'img1'
-    }
+    },
+
+    {
+      id: 2,
+      questao: 'Qual das duas imagens apresenta o fundados do Facebook?',
+      opcoes: ['img1', 'img3'],
+      respostaCerta: 'img3'
+    },
+
+    {
+      id: 3,
+      questao: 'Em que imagem identificamos Brendan Eich fundador da Linguagem JavaScript?',
+      opcoes: ['img4', 'img2'],
+      respostaCerta: 'img4'
+    },
+
+    {
+      id: 4,
+      questao: 'Qual das imagens apresenta um dos fundadores da Microsoft?',
+      opcoes: ['img4', 'img5'],
+      respostaCerta: 'img5'
+    },
+
+    {
+      id: 5,
+      questao: 'Identifique Bill Gates entre essas duas imagens',
+      opcoes: ['img5', 'img3'],
+      respostaCerta: 'img5'
+    },
+
+    {
+      id: 6,
+      questao: 'Dennis Ritchie foi um dos desenvolvedores da Linguagem C. Identifique',
+      opcoes: ['img7', 'img6'],
+      respostaCerta: 'img6'
+    },
+
+    {
+      id: 7,
+      questao: 'Jan Koum foi um dos desenvolvedores da rede whatsApp. Identifique',
+      opcoes: ['img8', 'img6'],
+      respostaCerta: 'img8'
+    },
+
+    {
+      id: 8,
+      questao: 'Bjarne Stroustrup foi um dos desenvolvedores da Linguagem C++. Identifique',
+      opcoes: ['img8', 'img9'],
+      respostaCerta: 'img9'
+    },
+
+    {
+      id: 9,
+      questao: 'Donald D. Chamberlin foi um dos desenvolvedores da Linguagem SQL. Identifique',
+      opcoes: ['img10', 'img9'],
+      respostaCerta: 'img10'
+    },
+
+    {
+      id: 10,
+      questao: 'Mike Krieger foi um dos desenvolvedores do Instagram SQL. Identifique',
+      opcoes: ['img11', 'img10'],
+      respostaCerta: 'img11'
+    },
+
+
   ]);
 
   const [pontos, setPontos] = useState(0);
