@@ -342,7 +342,7 @@ const Room = () => {
       setVis(true);
       setMsg("Resposta Certa!");
       setPontos(pontos >= pontos + 2);
-      setPontos(pontos + 1);
+      setPontos(pontos + 2);
       //setTempo(0);
     } else {
       setVis(true);
@@ -361,12 +361,12 @@ const Room = () => {
 
   if (pontos == 15) {
     return <View style={styles.containerEnd}>
-      <Text style={styles.titleCongratulations}>Parabéns por terminar o jogo com êxito!</Text>
+      <Text style={styles.titleCongratulations}>Parabéns por terminar a primeira fase com êxito!</Text>
       <Text style={styles.subtitle}>Pontuação: {pontos} pontos.</Text>
 
       <TouchableOpacity style={styles.buttonPlayAgain}
-        onPress={() => navigate('Home')}>
-        <Text style={styles.textPlayAgain}>Finalizar</Text>
+        onPress={() => navigate('Level2')}>
+        <Text style={styles.textPlayAgain}>Seguir</Text>
       </TouchableOpacity>
     </View>
   }
