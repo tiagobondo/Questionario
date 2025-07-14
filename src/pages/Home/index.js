@@ -31,6 +31,8 @@ const Home = () => {
         <Text style={styles.txtBtnGo}>Começar</Text>
       </TouchableOpacity>
 
+      <Text style={styles.txtVersion}>version 1.0.0</Text>
+
 
     </View>
   )

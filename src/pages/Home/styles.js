@@ -39,5 +39,12 @@ export const styles = StyleSheet.create({
     fontSize: defaultStyles.fontSize[3],
     fontWeight: 'bold',
     color: defaultStyles.colors.cor03
+  },
+
+  txtVersion: {
+    fontSize: defaultStyles.fontSize[0],
+    marginTop: '5%',
+    textAlign: 'center',
+    color: defaultStyles.colors.cor03
   }
 })

@@ -8,11 +8,13 @@ import {
   TouchableOpacity,
   StatusBar,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Modal
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { styles } from './styles';
+import { defaultStyles } from '../../../defaultStyles/defaultSyles';
 
 const Room = () => {
   const [questoes, setQuestoes] = useState([
@@ -110,7 +112,7 @@ const Room = () => {
     {
       id: 14,
       questao: 'Qual estrutura é usada para escolher entre várias opções?',
-      opcoes: ['switch ', 'loop', 'array', 'input'],
+      opcoes: ['switch', 'loop', 'array', 'input'],
       respostaCerta: 'switch'
     },
 
@@ -118,7 +120,7 @@ const Room = () => {
       id: 15,
       questao: 'O que significa IDE em programação?',
       opcoes: ['Integrated Development Environment', 'Internal Data Execution', 'Integrated Data Editor', 'Internet Development Editor'],
-      respostaCerta: 'Integrated Development Environment '
+      respostaCerta: 'Integrated Development Environment'
     },
 
     {
@@ -145,8 +147,8 @@ const Room = () => {
     {
       id: 19,
       questao: 'Como se chama uma variável definida dentro de uma função?',
-      opcoes: ['Static', 'Global', 'Final', 'Local '],
-      respostaCerta: 'Local '
+      opcoes: ['Static', 'Global', 'Final', 'Local'],
+      respostaCerta: 'Local'
     },
 
     {
@@ -173,14 +175,14 @@ const Room = () => {
     {
       id: 23,
       questao: 'Qual estrutura armazena dados em pares chave-valor?',
-      opcoes: ['List', 'Set', 'Dictionary', 'Array '],
+      opcoes: ['List', 'Set', 'Dictionary', 'Array'],
       respostaCerta: 'Dictionary'
     },
 
     {
       id: 24,
       questao: 'Qual é a saída de True and False em Python?',
-      opcoes: ['True', 'False', 'None', 'Error '],
+      opcoes: ['True', 'False', 'None', 'Error'],
       respostaCerta: 'False'
     },
 
@@ -301,12 +303,18 @@ const Room = () => {
   const [pontos, setPontos] = useState(0);
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
+  // const [tempo, setTempo] = useState(0);
+  const [vis, setVis] = useState(false);
+  const [msg, setMsg] = useState("");
 
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
 
   useEffect(() => {
     setProximaQuestao();
   }, [])
+
+  //
+  var n = 0;
 
   const setProximaQuestao = () => {
     const questoesRestantes = questoes.filter((q) => !questaoUsada.includes(q.id));
@@ -322,51 +330,94 @@ const Room = () => {
     }
   }
 
+  const avancar = () => {
+    setVis(false);
+    setProximaQuestao();
+  }
+
   const verificandoResposta = (selectedOption) => {
     const resposta = questaoAtual.respostaCerta;
 
     if (resposta == selectedOption) {
+      setVis(true);
+      setMsg("Resposta Certa!");
       setPontos(pontos >= pontos + 2);
-      Alert.alert('', 'Resposta Certa!');
-      setProximaQuestao();
+      setPontos(pontos + 1);
+      //setTempo(0);
     } else {
-      Alert.alert('Resposta Incorrecta!');
+      setVis(true);
+      setMsg("Resposta Errada!");
       navigate('Home');
       setPontos(0);
     }
   }
 
+  //Timer
   if (!questaoAtual) {
     if (pontos == 0) {
-      return <View style={styles.containerLoading}><ActivityIndicator color='#d4002e' /></View>
-    } else {
-      return <View style={styles.containerEnd}>
-        <Text style={styles.titleCongratulations}>Parabéns!</Text>
-        <Text style={styles.subtitle}> Você terminou o jogo com êxito obtendo {pontos} pontos.</Text>
-
-        <TouchableOpacity style={styles.buttonPlayAgain} onPress={() => navigate('Home')}>
-          <Text style={styles.textPlayAgain}>Recomeçar</Text>
-        </TouchableOpacity>
-      </View>
+      return <View style={styles.containerLoading}><ActivityIndicator color={defaultStyles.colors.cor02} size={'large'} /></View>
     }
+  }
+
+  if (pontos == 15) {
+    return <View style={styles.containerEnd}>
+      <Text style={styles.titleCongratulations}>Parabéns por terminar o jogo com êxito!</Text>
+      <Text style={styles.subtitle}>Pontuação: {pontos} pontos.</Text>
+
+      <TouchableOpacity style={styles.buttonPlayAgain}
+        onPress={() => navigate('Home')}>
+        <Text style={styles.textPlayAgain}>Finalizar</Text>
+      </TouchableOpacity>
+    </View>
   }
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
 
+      <Modal
+        visible={vis}
+        transparent={true}
+        animationType='fade'
+      >
+        <View style={styles.modal}>
+          <View style={styles.contentModal}>
+            <Text style={styles.msgModal}>{msg}</Text>
+            <TouchableOpacity
+              onPress={() => avancar()}
+              style={styles.btnOk}
+            >
+              <Text style={styles.txtBtnOk}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Text style={styles.title}>Sala de Jogo</Text>
+
       <View style={styles.containerQuestao}>
+        <Text style={styles.score}>Pontos: {pontos}</Text>
         <Text style={styles.questao}>{questaoAtual.questao}</Text>
       </View>
 
       {
 
         questaoAtual.opcoes.map((option, index) => (
-          <TouchableOpacity key={index} onPress={() => verificandoResposta(option)} style={styles.respostas} activeOpacity={0.5}>
-            <Text style={styles.textQuestoes}>{option}</Text>
-          </TouchableOpacity>
+          <View style={styles.containerOptions}>
+            <Text style={styles.numeration}>{n = n + 1}</Text>
+            <TouchableOpacity key={index} onPress={() => verificandoResposta(option)} style={styles.btnOptions} activeOpacity={0.5}>
+              <Text style={styles.txtBtnOption}>{option}</Text>
+            </TouchableOpacity>
+          </View>
         ))
       }
+
+      <TouchableOpacity style={styles.btnExit}
+        onPress={() => goBack()}
+      >
+        <Text style={styles.txtBtnExit}>Abandonar</Text>
+      </TouchableOpacity>
+
     </View>
   )
 }
