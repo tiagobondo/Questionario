@@ -109,6 +109,7 @@ const Level2 = (props) => {
   const [pontos, setPontos] = useState(props.route.pontos);
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
+  const [tempo, setTempo] = useState(15);
   const [vis, setVis] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -117,6 +118,24 @@ const Level2 = (props) => {
   useEffect(() => {
     setProximaQuestao();
   }, [])
+
+  useEffect(() => {
+    if (tempo == 0) {
+      setVis(true);
+      setMsg("Tempo Esgotado!");
+      setTimeout(() => {
+        reset({
+          index: 0,
+          routes: [{ name: 'Home' }]
+        });
+      }, 800)
+    }
+    const temporizador = setTimeout(() => {
+      setTempo(tempo - 1);
+    }, 1000);
+
+    return () => clearTimeout(temporizador);
+  }, [tempo])
 
   const setProximaQuestao = () => {
     const questoesRestantes = questoes.filter((q) => !questaoUsada.includes(q.id));
@@ -149,7 +168,12 @@ const Level2 = (props) => {
     } else {
       setVis(true);
       setMsg("Resposta Errada!");
-      navigate('Home');
+      setTimeout(() => {
+        reset({
+          index: 0,
+          routes: [{ name: 'Home' }]
+        });
+      }, 500)
       setPontos(0);
     }
   }
@@ -201,7 +225,14 @@ const Level2 = (props) => {
       {questaoAtual && (
         <>
           <View style={styles.containerQuestao}>
-            <Text style={styles.score}>Pontos: {pontos}</Text>
+            <View style={styles.containerTimer}>
+                          <FontAwesome5
+                            name='clock'
+                            size={defaultStyles.fontSize[5]}
+                            color={defaultStyles.colors.cor03}
+                          />
+                          <Text style={styles.time}>{tempo}</Text>
+                        </View>
             <Text style={styles.questao}>{questaoAtual.questao}</Text>
           </View>
 

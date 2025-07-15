@@ -45,6 +45,17 @@ export const styles = StyleSheet.create({
     fontSize: defaultStyles.fontSize[3]
   },
 
+  containerTimer: {
+    flexDirection: 'row'
+  },
+
+  time: {
+    fontSize: defaultStyles.fontSize[3],
+    color: defaultStyles.colors.cor03,
+    fontWeight: 'bold',
+    paddingLeft: '2%'
+  },
+
   title: {
     fontSize: defaultStyles.fontSize[4],
     color: defaultStyles.colors.cor02,

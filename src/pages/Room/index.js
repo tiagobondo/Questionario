@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Modal
 } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { styles } from './styles';
@@ -303,15 +304,33 @@ const Room = () => {
   const [pontos, setPontos] = useState(0);
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
-  const [tempo, setTempo] = useState(0);
+  const [tempo, setTempo] = useState(15);
   const [vis, setVis] = useState(false);
   const [msg, setMsg] = useState("");
 
   const { reset } = useNavigation();
-
+  //
   useEffect(() => {
     setProximaQuestao();
   }, []);
+  //
+  useEffect(() => {
+    if (tempo == 0) {
+      setVis(true);
+      setMsg("Tempo Esgotado!");
+      setTimeout(() => {
+        reset({
+          index: 0,
+          routes: [{ name: 'Home' }]
+        });
+      }, 800)
+    }
+    const temporizador = setTimeout(() => {
+      setTempo(tempo - 1);
+    }, 1000);
+
+    return () => clearTimeout(temporizador);
+  }, [tempo])
 
   const setProximaQuestao = () => {
     const questoesRestantes = questoes.filter((q) => !questaoUsada.includes(q.id));
@@ -403,7 +422,14 @@ const Room = () => {
       {questaoAtual && (
         <>
           <View style={styles.containerQuestao}>
-            <Text>{tempo}</Text>
+            <View style={styles.containerTimer}>
+              <FontAwesome5
+                name='clock'
+                size={defaultStyles.fontSize[5]}
+                color={defaultStyles.colors.cor03}
+              />
+              <Text style={styles.time}>{tempo}</Text>
+            </View>
             <Text style={styles.score}>Pontos: {pontos}</Text>
             <Text style={styles.questao}>{questaoAtual.questao}</Text>
           </View>
