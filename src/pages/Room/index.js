@@ -303,15 +303,15 @@ const Room = () => {
   const [pontos, setPontos] = useState(0);
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
-  // const [tempo, setTempo] = useState(0);
+  const [tempo, setTempo] = useState(0);
   const [vis, setVis] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const { navigate, goBack } = useNavigation();
+  const { reset } = useNavigation();
 
   useEffect(() => {
     setProximaQuestao();
-  }, [])
+  }, []);
 
   const setProximaQuestao = () => {
     const questoesRestantes = questoes.filter((q) => !questaoUsada.includes(q.id));
@@ -344,18 +344,26 @@ const Room = () => {
     } else {
       setVis(true);
       setMsg("Resposta Errada!");
-      navigate('Home');
+      setTimeout(() => {
+        reset({
+          index: 0,
+          routes: [{ name: 'Home' }]
+        });
+      }, 500)
+      //navigate('Home');
       setPontos(0);
     }
   }
 
-  if (pontos == 18) {
+  if (pontos == 18) {//18
     return <View style={styles.containerEnd}>
+      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
       <Text style={styles.titleCongratulations}>Primeira Fase Terminada!</Text>
       <Text style={styles.subtitle}>Pontos: {pontos} pontos.</Text>
 
       <TouchableOpacity style={styles.buttonPlayAgain}
-        onPress={() => navigate('Level2', { pontos: pontos })}>
+        onPress={() => reset({ index: 1, routes: [{ name: 'Level2', pontos: pontos }] })}
+      >
         <Text style={styles.textPlayAgain}>Seguir</Text>
       </TouchableOpacity>
     </View>
@@ -395,6 +403,7 @@ const Room = () => {
       {questaoAtual && (
         <>
           <View style={styles.containerQuestao}>
+            <Text>{tempo}</Text>
             <Text style={styles.score}>Pontos: {pontos}</Text>
             <Text style={styles.questao}>{questaoAtual.questao}</Text>
           </View>
@@ -414,8 +423,7 @@ const Room = () => {
 
 
       <TouchableOpacity style={styles.btnExit}
-        onPress={() => goBack()}
-      >
+        onPress={() => reset({ index: 2, routes: [{ name: 'Home' }] })}>
         <Text style={styles.txtBtnExit}>Abandonar</Text>
       </TouchableOpacity>
 

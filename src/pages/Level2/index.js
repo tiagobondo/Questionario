@@ -30,6 +30,7 @@ const imagens = {
 
 
 const Level2 = (props) => {
+  //props.route.pontos
 
   const [questoes, setQuestoes] = useState([
     {
@@ -41,7 +42,7 @@ const Level2 = (props) => {
 
     {
       id: 2,
-      questao: 'Qual das duas imagens apresenta o fundados do Facebook?',
+      questao: 'Qual das duas imagens apresenta o fundador do Facebook?',
       opcoes: ['img1', 'img3'],
       respostaCerta: 'img3'
     },
@@ -105,13 +106,13 @@ const Level2 = (props) => {
 
   ]);
 
-  const [pontos, setPontos] = useState(props.route.params.pontos);
+  const [pontos, setPontos] = useState(props.route.pontos);
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
   const [vis, setVis] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const { navigate, goBack } = useNavigation();
+  const { navigate, goBack, reset } = useNavigation();
 
   useEffect(() => {
     setProximaQuestao();
@@ -153,13 +154,14 @@ const Level2 = (props) => {
     }
   }
 
-  if (pontos == 24) {
+  if (pontos == 24) { //24
     return <View style={styles.containerEnd}>
+      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
       <Text style={styles.titleCongratulations}>Parabéns, Você é o grande vencedor!</Text>
       <Text style={styles.subtitle}>Pontuação: {pontos} pontos.</Text>
 
       <TouchableOpacity style={styles.buttonPlayAgain}
-        onPress={() => navigate('Home')}>
+        onPress={() => reset({ index: 2, routes: [{ name: 'Home' }] })}>
         <Text style={styles.textPlayAgain}>Finalizado</Text>
       </TouchableOpacity>
     </View>
@@ -222,8 +224,7 @@ const Level2 = (props) => {
       )}
 
       <TouchableOpacity style={styles.btnExit}
-        onPress={() => goBack()}
-      >
+        onPress={() => reset({ index: 2, routes: [{ name: 'Home' }] })}>
         <Text style={styles.txtBtnExit}>Abandonar</Text>
       </TouchableOpacity>
     </View>
