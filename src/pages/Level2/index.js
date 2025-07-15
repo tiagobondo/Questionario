@@ -9,6 +9,7 @@ import {
   StatusBar,
   Modal
 } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { styles } from './styles';
@@ -109,7 +110,8 @@ const Level2 = (props) => {
   const [pontos, setPontos] = useState(props.route.pontos);
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
-  const [tempo, setTempo] = useState(15);
+  const [tempo, setTempo] = useState(10);
+  const [emPausa, setemPausa] = useState(false);
   const [vis, setVis] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -129,12 +131,17 @@ const Level2 = (props) => {
           routes: [{ name: 'Home' }]
         });
       }, 800)
-    }
-    const temporizador = setTimeout(() => {
-      setTempo(tempo - 1);
-    }, 1000);
+    } else {
+      if (emPausa) {
+        //
+      } else {
+        const temporizador = setTimeout(() => {
+          setTempo(tempo - 1);
+        }, 1000);
 
-    return () => clearTimeout(temporizador);
+        return () => clearTimeout(temporizador);
+      }
+    }
   }, [tempo])
 
   const setProximaQuestao = () => {
@@ -152,6 +159,8 @@ const Level2 = (props) => {
   }
 
   const finalizar = () => {
+    setemPausa(false);
+    setTempo(10);
     setVis(false);
     setProximaQuestao();
   }
@@ -160,6 +169,7 @@ const Level2 = (props) => {
     const resposta = questaoAtual.respostaCerta;
 
     if (resposta == selectedOption) {
+      setemPausa(true);
       setVis(true);
       setMsg("Resposta Certa!");
       setPontos(pontos >= pontos + 2);
@@ -226,13 +236,13 @@ const Level2 = (props) => {
         <>
           <View style={styles.containerQuestao}>
             <View style={styles.containerTimer}>
-                          <FontAwesome5
-                            name='clock'
-                            size={defaultStyles.fontSize[5]}
-                            color={defaultStyles.colors.cor03}
-                          />
-                          <Text style={styles.time}>{tempo}</Text>
-                        </View>
+              <FontAwesome5
+                name='clock'
+                size={defaultStyles.fontSize[5]}
+                color={defaultStyles.colors.cor03}
+              />
+              <Text style={styles.time}>{tempo}</Text>
+            </View>
             <Text style={styles.questao}>{questaoAtual.questao}</Text>
           </View>
 

@@ -305,6 +305,7 @@ const Room = () => {
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
   const [tempo, setTempo] = useState(15);
+  const [emPausa, setemPausa] = useState(false);
   const [vis, setVis] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -324,12 +325,16 @@ const Room = () => {
           routes: [{ name: 'Home' }]
         });
       }, 800)
+    } else {
+      if (emPausa) {
+        //
+      } else {
+        const temporizador = setTimeout(() => {
+          setTempo(tempo - 1);
+        }, 1000);
+        return () => clearTimeout(temporizador);
+      }
     }
-    const temporizador = setTimeout(() => {
-      setTempo(tempo - 1);
-    }, 1000);
-
-    return () => clearTimeout(temporizador);
   }, [tempo])
 
   const setProximaQuestao = () => {
@@ -347,6 +352,8 @@ const Room = () => {
   }
 
   const avancar = () => {
+    setemPausa(false);//
+    setTempo(15);
     setVis(false);
     setProximaQuestao();
   }
@@ -355,6 +362,7 @@ const Room = () => {
     const resposta = questaoAtual.respostaCerta;
 
     if (resposta == selectedOption) {
+      setemPausa(true);
       setVis(true);
       setMsg("Resposta Certa!");
       setPontos(pontos >= pontos + 2);
