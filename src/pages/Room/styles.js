@@ -146,7 +146,7 @@ export const styles = StyleSheet.create({
     marginTop: '5%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: defaultStyles.colors.cor04,
+    backgroundColor: defaultStyles.colors.cor02,
     height: defaultStyles.height[4],
     width: defaultStyles.width[6],
     borderRadius: 50

@@ -313,9 +313,6 @@ const Room = () => {
     setProximaQuestao();
   }, [])
 
-  //
-  var n = 0;
-
   const setProximaQuestao = () => {
     const questoesRestantes = questoes.filter((q) => !questaoUsada.includes(q.id));
 
@@ -352,23 +349,23 @@ const Room = () => {
     }
   }
 
+  if (pontos == 18) {
+    return <View style={styles.containerEnd}>
+      <Text style={styles.titleCongratulations}>Primeira Fase Terminada!</Text>
+      <Text style={styles.subtitle}>Pontos: {pontos} pontos.</Text>
+
+      <TouchableOpacity style={styles.buttonPlayAgain}
+        onPress={() => navigate('Level2', { pontos: pontos })}>
+        <Text style={styles.textPlayAgain}>Seguir</Text>
+      </TouchableOpacity>
+    </View>
+  }
+
   //Timer
   if (!questaoAtual) {
     if (pontos == 0) {
       return <View style={styles.containerLoading}><ActivityIndicator color={defaultStyles.colors.cor02} size={'large'} /></View>
     }
-  }
-
-  if (pontos == 15) {
-    return <View style={styles.containerEnd}>
-      <Text style={styles.titleCongratulations}>Parabéns por terminar a primeira fase com êxito!</Text>
-      <Text style={styles.subtitle}>Pontuação: {pontos} pontos.</Text>
-
-      <TouchableOpacity style={styles.buttonPlayAgain}
-        onPress={() => navigate('Level2')}>
-        <Text style={styles.textPlayAgain}>Seguir</Text>
-      </TouchableOpacity>
-    </View>
   }
 
   return (
@@ -395,22 +392,26 @@ const Room = () => {
 
       <Text style={styles.title}>Sala de Jogo</Text>
 
-      <View style={styles.containerQuestao}>
-        <Text style={styles.score}>Pontos: {pontos}</Text>
-        <Text style={styles.questao}>{questaoAtual.questao}</Text>
-      </View>
-
-      {
-
-        questaoAtual.opcoes.map((option, index) => (
-          <View style={styles.containerOptions}>
-            <Text style={styles.numeration}>{n = n + 1}</Text>
-            <TouchableOpacity key={index} onPress={() => verificandoResposta(option)} style={styles.btnOptions} activeOpacity={0.5}>
-              <Text style={styles.txtBtnOption}>{option}</Text>
-            </TouchableOpacity>
+      {questaoAtual && (
+        <>
+          <View style={styles.containerQuestao}>
+            <Text style={styles.score}>Pontos: {pontos}</Text>
+            <Text style={styles.questao}>{questaoAtual.questao}</Text>
           </View>
-        ))
-      }
+
+          {
+            questaoAtual.opcoes.map((option, index) => (
+              <View key={index} style={styles.containerOptions}>
+                <Text style={styles.numeration}>{index + 1}</Text>
+                <TouchableOpacity onPress={() => verificandoResposta(option)} style={styles.btnOptions} activeOpacity={0.5}>
+                  <Text style={styles.txtBtnOption}>{option}</Text>
+                </TouchableOpacity>
+              </View>
+            ))
+          }
+        </>
+      )}
+
 
       <TouchableOpacity style={styles.btnExit}
         onPress={() => goBack()}

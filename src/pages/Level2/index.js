@@ -6,7 +6,8 @@ import {
   Image,
   Alert,
   ActivityIndicator,
-  StatusBar
+  StatusBar,
+  Modal
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,21 +15,21 @@ import { styles } from './styles';
 import { defaultStyles } from '../../../defaultStyles/defaultSyles';
 
 const imagens = {
-  img1: require('../../../assets/img/img1.jpg'),
-  img2: require('../../../assets/img/img2.jpg'),
-  img3: require('../../../assets/img/img3.jpg'),
-  img4: require('../../../assets/img/img4.jpg'),
-  img5: require('../../../assets/img/img5.jpg'),
-  img6: require('../../../assets/img/img6.jpg'),
-  img7: require('../../../assets/img/img7.jpg'),
-  img8: require('../../../assets/img/img8.jpg'),
-  img9: require('../../../assets/img/img9.jpg'),
-  img10: require('../../../assets/img/img10.jpg'),
-  img11: require('../../../assets/img/img11.jpg'),
+  img1: require('../../../assets/img/img1.jpeg'),
+  img2: require('../../../assets/img/img2.jpeg'),
+  img3: require('../../../assets/img/img3.jpeg'),
+  img4: require('../../../assets/img/img4.jpeg'),
+  img5: require('../../../assets/img/img5.jpeg'),
+  img6: require('../../../assets/img/img6.jpeg'),
+  img7: require('../../../assets/img/img7.jpeg'),
+  img8: require('../../../assets/img/img8.jpeg'),
+  img9: require('../../../assets/img/img9.jpeg'),
+  img10: require('../../../assets/img/img10.jpeg'),
+  img11: require('../../../assets/img/img11.jpeg'),
 }
 
 
-const Level2 = () => {
+const Level2 = (props) => {
 
   const [questoes, setQuestoes] = useState([
     {
@@ -96,7 +97,7 @@ const Level2 = () => {
 
     {
       id: 10,
-      questao: 'Mike Krieger foi um dos desenvolvedores do Instagram SQL. Identifique',
+      questao: 'Mike Krieger foi um dos desenvolvedores do Instagram. Identifique',
       opcoes: ['img11', 'img10'],
       respostaCerta: 'img11'
     },
@@ -104,18 +105,17 @@ const Level2 = () => {
 
   ]);
 
-  const [pontos, setPontos] = useState(0);
+  const [pontos, setPontos] = useState(props.route.params.pontos);
   const [questaoUsada, setQuestaoUsada] = useState([]);
   const [questaoAtual, setQuestaoAtual] = useState(null);
+  const [vis, setVis] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const { navigate, goBack } = useNavigation();
 
   useEffect(() => {
     setProximaQuestao();
   }, [])
-
-  //
-  var n = 1;
 
   const setProximaQuestao = () => {
     const questoesRestantes = questoes.filter((q) => !questaoUsada.includes(q.id));
@@ -131,21 +131,38 @@ const Level2 = () => {
     }
   }
 
+  const finalizar = () => {
+    setVis(false);
+    setProximaQuestao();
+  }
+
   const verificandoResposta = (selectedOption) => {
     const resposta = questaoAtual.respostaCerta;
 
     if (resposta == selectedOption) {
-      // setVis(true);
-      Alert.alert("Resposta Certa!");
+      setVis(true);
+      setMsg("Resposta Certa!");
       setPontos(pontos >= pontos + 2);
       setPontos(pontos + 2);
       //setTempo(0);
     } else {
-      //setVis(true);
-      Alert.alert("Resposta Errada!");
+      setVis(true);
+      setMsg("Resposta Errada!");
       navigate('Home');
       setPontos(0);
     }
+  }
+
+  if (pontos == 24) {
+    return <View style={styles.containerEnd}>
+      <Text style={styles.titleCongratulations}>Parabéns, Você é o grande vencedor!</Text>
+      <Text style={styles.subtitle}>Pontuação: {pontos} pontos.</Text>
+
+      <TouchableOpacity style={styles.buttonPlayAgain}
+        onPress={() => navigate('Home')}>
+        <Text style={styles.textPlayAgain}>Finalizado</Text>
+      </TouchableOpacity>
+    </View>
   }
 
   //Timer
@@ -155,43 +172,54 @@ const Level2 = () => {
     }
   }
 
-  if (pontos == 2) {
-    return <View style={styles.containerEnd}>
-      <Text style={styles.titleCongratulations}>Parabéns por terminar a primeira fase com êxito!</Text>
-      <Text style={styles.subtitle}>Pontuação: {pontos} pontos.</Text>
-
-      <TouchableOpacity style={styles.buttonPlayAgain}
-        onPress={() => navigate('Level2')}>
-        <Text style={styles.textPlayAgain}>Seguir</Text>
-      </TouchableOpacity>
-    </View>
-  }
-
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sala de Jogo</Text>
+      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
 
-      <View style={styles.containerQuestao}>
-        <Text style={styles.score}>Pontos: {pontos}</Text>
-        <Text style={styles.questao}>{questaoAtual.questao}</Text>
-      </View>
-
-      {
-
-        questaoAtual.opcoes.map((option, index) => (
-          <View style={styles.containerOptions}>
-            <Image
-              source={imagens[option]}
-              style={styles.img}
-            />
-
-            <TouchableOpacity key={index} onPress={() => verificandoResposta(option)} style={styles.btnOptions} activeOpacity={0.5}>
-              <Text style={styles.txtBtnOption}>{n++}</Text>
+      <Modal
+        visible={vis}
+        transparent={true}
+        animationType='fade'
+      >
+        <View style={styles.modal}>
+          <View style={styles.contentModal}>
+            <Text style={styles.msgModal}>{msg}</Text>
+            <TouchableOpacity
+              onPress={() => finalizar()}
+              style={styles.btnOk}
+            >
+              <Text style={styles.txtBtnOk}>OK</Text>
             </TouchableOpacity>
           </View>
-        ))
-      }
+        </View>
+      </Modal>
+
+      <Text style={styles.title}>Sala de Jogo</Text>
+
+      {questaoAtual && (
+        <>
+          <View style={styles.containerQuestao}>
+            <Text style={styles.score}>Pontos: {pontos}</Text>
+            <Text style={styles.questao}>{questaoAtual.questao}</Text>
+          </View>
+
+          {
+
+            questaoAtual.opcoes.map((option, index) => (
+              <View key={index} style={styles.containerOptions}>
+                <Image
+                  source={imagens[option]}
+                  style={styles.img}
+                />
+
+                <TouchableOpacity onPress={() => verificandoResposta(option)} style={styles.btnOptions} activeOpacity={0.5}>
+                  <Text style={styles.txtBtnOption}>{index + 1}</Text>
+                </TouchableOpacity>
+              </View>
+            ))
+          }
+        </>
+      )}
 
       <TouchableOpacity style={styles.btnExit}
         onPress={() => goBack()}

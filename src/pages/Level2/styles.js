@@ -9,6 +9,42 @@ export const styles = StyleSheet.create({
     paddingVertical: '15%',
   },
 
+  modal: {
+    flex: 1,
+    backgroundColor: '#0005',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: '5%'
+  },
+
+  contentModal: {
+    width: defaultStyles.width[7],
+    backgroundColor: defaultStyles.colors.cor03,
+    height: defaultStyles.height[16],
+    padding: 25
+  },
+
+  msgModal: {
+    fontSize: defaultStyles.fontSize[3],
+    fontWeight: 'bold',
+    color: defaultStyles.colors.cor06
+  },
+
+  btnOk: {
+    marginTop: '20%',
+    backgroundColor: defaultStyles.colors.cor06,
+    height: defaultStyles.height[3],
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: defaultStyles.width[0],
+    borderRadius: 5
+  },
+
+  txtBtnOk: {
+    color: defaultStyles.colors.cor03,
+    fontSize: defaultStyles.fontSize[3]
+  },
+
   containerOptions: {
     flexDirection: 'row',
     marginBottom: 5,
@@ -69,6 +105,54 @@ export const styles = StyleSheet.create({
 
   txtBtnExit: {
     fontSize: defaultStyles.fontSize[2],
+    fontWeight: 'bold',
+    color: defaultStyles.colors.cor03
+  },
+  //
+
+  containerLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: defaultStyles.colors.cor11
+  },
+
+  //
+  containerEnd: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: defaultStyles.colors.cor11,
+    paddingHorizontal: '5%',
+    paddingVertical: '5%'
+  },
+
+  titleCongratulations: {
+    fontSize: defaultStyles.fontSize[4],
+    color: defaultStyles.colors.cor03,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: '5%'
+  },
+
+  subtitle: {
+    fontSize: defaultStyles.fontSize[3],
+    color: defaultStyles.colors.cor03,
+  },
+
+  buttonPlayAgain: {
+    alignSelf: 'center',
+    marginTop: '5%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: defaultStyles.colors.cor04,
+    height: defaultStyles.height[4],
+    width: defaultStyles.width[6],
+    borderRadius: 50
+  },
+
+  textPlayAgain: {
+    fontSize: defaultStyles.fontSize[3],
     fontWeight: 'bold',
     color: defaultStyles.colors.cor03
   }

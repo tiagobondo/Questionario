@@ -11,7 +11,7 @@ const NativeStack = () => {
 
   return (
     <Navigator
-      initialRouteName="Level2"
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false
       }}
